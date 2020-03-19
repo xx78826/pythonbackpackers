@@ -29,11 +29,11 @@ for i in range(5):
     driver.find_element_by_link_text('下頁').click()
     time.sleep(10)
     
-    html = driver.find_elements_by_css_selector("#threadbits_forum_57 > tr:nth-child(1n+0) > td:nth-child(3) > div")
-    doc = pq(html)
-    for eachData in html:
-        eachDataList.append(eachData.text)
-        print(eachData.text)
+#    html = driver.find_elements_by_css_selector("#threadbits_forum_57 > tr:nth-child(1n+0) > td:nth-child(3) > div")
+#    doc = pq(html)
+#    for eachData in html:
+#        eachDataList.append(eachData.text)
+#        print(eachData.text)
 #http://www.victorgau.com/?p=5382
 for i, s in enumerate(eachDataList):
     if '訪客' in s:
