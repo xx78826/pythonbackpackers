@@ -1,0 +1,88 @@
+from selenium import webdriver
+from pyquery import PyQuery as pq
+import time
+driver = webdriver.Chrome()
+driver.get("https://www.backpackers.com.tw/forum/forumdisplay.php?f=57")
+#基本起手式
+#html = driver.find_elements_by_css_selector("*")
+#doc = pq(html)
+#for eachData in html:
+#    print(eachData.text)
+
+# 標題難找目前先找全部行
+#html = driver.find_elements_by_css_selector("#threadbits_forum_57")
+#doc = pq(html)
+#for eachDataAllInRow in html:
+#    print(eachDataAllInRow.text)
+
+#發文日期 時間 作者
+eachDataList = []
+html = driver.find_elements_by_css_selector("#threadbits_forum_57 > tr:nth-child(1n+0) > td:nth-child(3) > div")
+
+doc = pq(html)
+for eachData in html:
+    eachDataList.append(eachData.text)
+    print(eachData.text)
+       
+for i in range(5):
+#    driver.find_element_by_css_selector("#inlinemodform > table:nth-child(8) > tbody > tr > td:nth-child(2) > div > table > tbody > tr > td:nth-child(1n+8) > a").click()
+    driver.find_element_by_link_text('下頁').click()
+    time.sleep(10)
+    
+    html = driver.find_elements_by_css_selector("#threadbits_forum_57 > tr:nth-child(1n+0) > td:nth-child(3) > div")
+    doc = pq(html)
+    for eachData in html:
+        eachDataList.append(eachData.text)
+        print(eachData.text)
+#http://www.victorgau.com/?p=5382
+for i, s in enumerate(eachDataList):
+    if '訪客' in s:
+        del eachDataList[i]
+print(eachDataList)
+    
+#https://gist.github.com/baijum/1047207/c670c7d1fe4a5a60d361d66869b20cc2ab1a4bf4    
+#inlinemodform > table:nth-child(8) > tbody > tr > td:nth-child(2) > div > table > tbody > tr > td:nth-child(8) > a
+#inlinemodform > table:nth-child(8) > tbody > tr > td:nth-child(2) > div > table > tbody > tr > td:nth-child(9) > a
+#inlinemodform > table:nth-child(8) > tbody > tr > td:nth-child(2) > div > table > tbody > tr > td:nth-child(10) > a
+#inlinemodform > table:nth-child(8) > tbody > tr > td:nth-child(2) > div > table > tbody > tr > td:nth-child(8) > a
+
+    
+#訪客發文是廣告應該把它刪掉
+#前7篇是置底文章應該把它刪掉
+#把資料格式從2018-04-12改成20180412
+listDataNew = []
+for each in range(len(eachDataList)):
+    if each >= 7:
+        listDataNew.append(eachDataList[each][0:10])
+        for eachStr in range(len(listDataNew)):
+            listDataNew[eachStr] = listDataNew[eachStr].replace("-","")
+
+#輸入日期期間把資料篩選出來
+listDayInStarToEnd = []
+starDay = int(input())
+endDay = int(input())
+#輸出總資料筆數
+print(len(listDataNew))
+for eachDayCheck in range(len(listDataNew)):
+    if (int(listDataNew[eachDayCheck]) >= starDay) & (int(listDataNew[eachDayCheck]) <= endDay):
+        listDayInStarToEnd.append(eachDayCheck)
+#輸出符合期間的筆數
+#輸出符合期間的在(listDataNew)原始資料位置
+print(len(listDayInStarToEnd))
+#print(listDayInStarToEnd)
+
+driver.quit()
+    
+    
+    
+#回覆量
+#html = driver.find_elements_by_css_selector("#threadbits_forum_57 > tr:nth-child(1n+0) > td.alt1.smallfont")
+#doc = pq(html)
+#for eachDataRes in html:
+#    print(eachDataRes.text)
+
+#觀看數
+#html = driver.find_elements_by_css_selector("#threadbits_forum_57 > tr:nth-child(1n+0) > td.alt2.smallfont")
+#doc = pq(html)
+#for eachDataReview in html:
+#    print(eachDataReview.text)
